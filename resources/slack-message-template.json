@@ -1,0 +1,9 @@
+{
+  "channel": "#ci-general",
+  "username": "Jenkins CI",
+  "icon_emoji": ":jenkins:",
+  "attachments": [],
+  "fields": [],
+  "color": "#3498db",
+  "footer": "Pipeline CI/CD Aziendale"
+}

@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins-shared-lib-test
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ..:/var/jenkins_home/jenkins-shared-library
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      - CASC_JENKINS_CONFIG=/usr/share/jenkins/ref/jenkins.yaml
+    # Plugin install via plugins.txt
+    # user: root
+
+  sonarqube:
+    image: sonarqube:community
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+
+  nexus:
+    image: sonatype/nexus3
+    ports:
+      - "8081:8081"
+
+  # Per test iOS (solo su macOS)
+  # mac-agent:
+  #   image: ...

@@ -1,0 +1,68 @@
+# Jenkins Shared Library Configuration
+# Versione: 1.0.0
+# Ultimo aggiornamento: 2024-01-01
+
+# Configurazione globale della libreria
+library:
+  name: jenkins-shared-library
+  version: 1.0.0
+  min-jenkins-version: "2.346.1"
+  min-plugin-versions:
+    workflow-cps: "2.90"
+    credentials-binding: "1.27"
+    docker-workflow: "1.28"
+    aws-steps: "1.40"
+    sonar: "2.13"
+    slack: "2.5"
+
+# Configurazione di default per i progetti
+defaults:
+  aws:
+    region: eu-west-1
+    session-duration: 3600
+
+  docker:
+    registries:
+      ecr:
+        type: ecr
+      nexus:
+        type: nexus
+        creds: nexus-docker-creds
+        username: jenkins
+
+  slack:
+    channel: "#ci-general"
+    channels:
+      dev: "#ci-dev"
+      staging: "#ci-staging"
+      prod: "#ci-prod"
+      prod-alerts: "#ops-oncall"
+
+  versioning:
+    gpg-sign: true
+    changelog: true
+    user-name: "Jenkins CI"
+    user-email: "jenkins@azienda.local"
+
+  security:
+    trivy-severity: "CRITICAL,HIGH"
+    fail-on-critical: true
+    fail-on-cvss: 7.0
+    sonar-quality-gate: true
+
+# Mappa ambienti CI/CD
+environments:
+  dev:
+    aws-account: "111111111111"
+    aws-role: "arn:aws:iam::111111111111:role/JenkinsDeployRole"
+    allowed-branches: ["*"]
+
+  staging:
+    aws-account: "222222222222"
+    aws-role: "arn:aws:iam::222222222222:role/JenkinsDeployRole"
+    allowed-branches: ["main", "develop", "release/*", "feature/*"]
+
+  prod:
+    aws-account: "333333333333"
+    aws-role: "arn:aws:iam::333333333333:role/JenkinsDeployRole"
+    allowed-branches: ["main", "release/*", "hotfix/*"]
